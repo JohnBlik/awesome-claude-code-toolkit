@@ -1,7 +1,9 @@
 node_modules
 *.tsbuildinfo
 dist
+dist-single
 dist-ssr
+portfolio.html
 *.local
 .vite
 .DS_Store

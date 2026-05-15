@@ -24,6 +24,27 @@ No local Node, no terminal commands — the badge is the workflow.
 | `vite.config.ts` — `strictPort: false`       | Vite auto-detects the next free port if `5173` is busy.                                      |
 | `forwardPorts: [5173]` + `onAutoForward`     | Codespaces labels the port `Vite — Cinematic Landing Page` and opens the preview tab.        |
 
+## Click-and-open single HTML file
+
+Want the whole portfolio as one file you can email or open with a double-click? Build it:
+
+```bash
+npm install
+npm run build:single
+```
+
+That produces `portfolio.html` (≈ 860 KB) with **every** asset inlined — React, Framer Motion, Three.js, all CSS, all icons, even the favicon as a data URI. No server, no `node_modules`, no relative paths. Open it from your file manager, drag it into a browser, attach it to an email — it just works.
+
+```
+file:///path/to/portfolio.html
+```
+
+`npm run build:single` runs Playwright-friendly post-processing (`scripts/finalize-single.mjs`) and you can validate the result with:
+
+```bash
+node scripts/verify-single.mjs    # boots the file:// build in headless Chromium
+```
+
 ## Local development
 
 ```bash
