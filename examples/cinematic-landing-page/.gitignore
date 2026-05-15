@@ -10,3 +10,11 @@ dist-ssr
 test-results
 playwright-report
 blob-report
+
+# Force-include workspace-shared VS Code config (overriding the
+# repo-root .gitignore that hides .vscode/). These power the one-click
+# Codespaces auto-launch of the dev server.
+!.vscode/
+!.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/extensions.json

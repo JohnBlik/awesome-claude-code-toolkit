@@ -13,9 +13,20 @@ export default defineConfig({
     },
   },
   server: {
-    host: '127.0.0.1',
+    // 0.0.0.0 — required for the dev server to be reachable from outside the
+    // container (Codespaces, Docker, WSL, etc.). On localhost only, it stays
+    // accessible at http://127.0.0.1:5173 as before.
+    host: true,
     port: 5173,
-    strictPort: true,
+    // Fall through to the next free port if 5173 is busy (true auto-detect).
+    strictPort: false,
+    // Don’t try to spawn a browser in headless / remote environments.
+    open: false,
+  },
+  preview: {
+    host: true,
+    port: 4173,
+    strictPort: false,
   },
   build: {
     target: 'es2020',

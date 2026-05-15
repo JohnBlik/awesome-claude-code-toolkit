@@ -4,9 +4,41 @@ A premium, motion-first portfolio for an independent web designer & developer. B
 
 ![Hero preview](./docs/hero-preview.png)
 
-## What's inside
+## Launch in GitHub Codespaces — one click
 
-A complete, single-page portfolio with nine sections, an animated 3D background, a custom cursor, magnetic buttons, a portfolio modal, an animated testimonials carousel, a multi-step contact form, a dark/light theme switch and full reduced-motion support.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/JohnBlik/awesome-claude-code-toolkit?devcontainer_path=examples%2Fcinematic-landing-page%2F.devcontainer%2Fdevcontainer.json)
+
+1. Click the badge (or **Code → Codespaces → Create codespace on …** on GitHub, then pick this devcontainer path).
+2. Wait while Codespaces provisions the container and runs `npm install` (~45–60 s the first time).
+3. The Vite dev server starts automatically via a workspace task; Codespaces detects the bound port and opens a live preview tab.
+
+No local Node, no terminal commands — the badge is the workflow.
+
+### How the one-click setup works
+
+| Piece                                        | What it does                                                                                 |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `.devcontainer/devcontainer.json`            | Node 22 image, `workspaceFolder` pinned to this example, `postCreateCommand: npm install`.   |
+| `.vscode/tasks.json` (`runOn: folderOpen`)   | Auto-runs `npm run dev` the moment VS Code finishes opening the workspace.                   |
+| `vite.config.ts` — `server.host: true`       | Binds Vite on `0.0.0.0` so the forwarded Codespaces URL can reach it.                        |
+| `vite.config.ts` — `strictPort: false`       | Vite auto-detects the next free port if `5173` is busy.                                      |
+| `forwardPorts: [5173]` + `onAutoForward`     | Codespaces labels the port `Vite — Cinematic Landing Page` and opens the preview tab.        |
+
+## Local development
+
+```bash
+npm install
+npm run dev        # http://127.0.0.1:5173 (or next free port)
+```
+
+### Available scripts
+
+| Script               | Purpose                                          |
+| -------------------- | ------------------------------------------------ |
+| `npm run dev`        | Vite dev server (auto-detects a free port).      |
+| `npm run build`      | Type-check + production bundle.                  |
+| `npm run preview`    | Serve the production build (port `4173`).        |
+| `npm run lint`       | ESLint over `.ts` / `.tsx`.                       |
 
 ## Highlights
 
@@ -46,21 +78,6 @@ A complete, single-page portfolio with nine sections, an animated 3D background,
 | 3D / WebGL      | Three.js                   |
 | Smoke tests     | Playwright                 |
 
-## Getting started
-
-```bash
-npm install
-npm run dev        # http://127.0.0.1:5173
-```
-
-### Available scripts
-
-| Script               | Purpose                                          |
-| -------------------- | ------------------------------------------------ |
-| `npm run dev`        | Vite dev server on `127.0.0.1:5173`.             |
-| `npm run build`      | Type-check + production bundle.                  |
-| `npm run preview`    | Serve the production build locally.              |
-
 ### Tests & scripts
 
 `scripts/smoke-test.mjs` is a Playwright end-to-end harness that exercises every interaction surface: rendering, the typewriter, all section anchors, the portfolio filter & modal (incl. Escape), the testimonials carousel, the pricing toggle, contact form validation + submit, the theme toggle, the mobile menu, and the reduced-motion variant. It also fails if any unexpected JS console error occurs.
@@ -92,6 +109,10 @@ After `npm run build` (gzip transfers, deferred / lazy chunks marked ⏳):
 ## Folder structure
 
 ```
+.devcontainer/
+└── devcontainer.json          # One-click Codespaces config (Node 22, port 5173 auto-forwarded)
+.vscode/
+└── tasks.json                 # Auto-runs `npm run dev` on folderOpen
 src/
 ├── App.tsx                       # Page composition + Suspense boundaries
 ├── main.tsx                      # React entry

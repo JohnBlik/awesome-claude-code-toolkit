@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "Cinematic Landing Page",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+
+  // Open VS Code directly inside this example, not the toolkit monorepo root.
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/examples/cinematic-landing-page",
+
+  // Install dependencies the first time the codespace is created.
+  "postCreateCommand": "npm install --no-audit --no-fund",
+
+  // Greet the user with a one-liner explaining how to start the dev server.
+  "postAttachCommand": {
+    "hint": "echo '\\n👉  Dev server: run \"npm run dev\" — Codespaces will auto-forward the port and open the preview.\\n'"
+  },
+
+  // Codespaces auto-detects bound ports, but we declare 5173 so the UI shows
+  // a friendly label and opens the preview automatically.
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "Vite — Cinematic Landing Page",
+      "onAutoForward": "openPreview",
+      "requireLocalPort": false
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": false,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "task.allowAutomaticTasks": "on",
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  }
+}
