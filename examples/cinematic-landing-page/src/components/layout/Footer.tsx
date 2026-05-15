@@ -1,20 +1,15 @@
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
+import { personal } from '@/data/personal';
 import { fadeUp, stagger, viewportOnce } from '@/lib/motion';
 
-const groups = [
-  {
-    title: 'Product',
-    links: ['Features', 'Pricing', 'Changelog', 'Roadmap'],
-  },
-  {
-    title: 'Company',
-    links: ['About', 'Careers', 'Press', 'Contact'],
-  },
-  {
-    title: 'Resources',
-    links: ['Documentation', 'Guides', 'Community', 'Support'],
-  },
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#services', label: 'Services' },
+  { href: '#portfolio', label: 'Work' },
+  { href: '#process', label: 'Process' },
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#contact', label: 'Contact' },
 ];
 
 export function Footer() {
@@ -37,71 +32,67 @@ export function Footer() {
         viewport={viewportOnce}
         className="container-narrow px-5 sm:px-8 lg:px-12 py-16 sm:py-20"
       >
-        <div className="grid gap-12 md:grid-cols-[1.4fr,1fr,1fr,1fr]">
-          <motion.div variants={fadeUp}>
-            <a href="#top" className="flex items-center gap-2 font-display text-xl font-semibold">
-              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg
-                bg-gradient-to-br from-brand-500 via-glow-violet to-glow-pink shadow-glow">
-                <Icon name="sparkle" size={18} className="text-white" />
-              </span>
-              Aurora
-            </a>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-              The cinematic platform that turns product launches into unforgettable
-              experiences — built for teams that ship beautifully.
-            </p>
-            <div className="mt-6 flex items-center gap-2">
-              {([
-                { icon: 'github', label: 'GitHub' },
-                { icon: 'twitter', label: 'Twitter' },
-                { icon: 'linkedin', label: 'LinkedIn' },
-              ] as const).map((s) => (
-                <a
-                  key={s.label}
-                  href="#"
-                  aria-label={s.label}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full
-                    border border-white/10 bg-white/5 text-white/70 transition-all
-                    hover:scale-110 hover:bg-white/10 hover:text-white"
-                >
-                  <Icon name={s.icon} size={16} />
-                </a>
-              ))}
-            </div>
-          </motion.div>
+        <motion.div variants={fadeUp} className="flex flex-col items-start gap-8">
+          <a
+            href="#top"
+            className="font-display text-4xl font-semibold leading-none sm:text-6xl"
+          >
+            <span className="text-gradient">{personal.name}</span>
+          </a>
+          <a
+            href={`mailto:${personal.email}`}
+            className="group inline-flex items-center gap-3 text-base text-white/75
+              transition-colors hover:text-white"
+          >
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full
+              border border-white/10 bg-white/5 text-white/75 transition-all
+              group-hover:bg-white/10">
+              <Icon name="mail" size={14} />
+            </span>
+            {personal.email}
+          </a>
+        </motion.div>
 
-          {groups.map((g) => (
-            <motion.div key={g.title} variants={fadeUp}>
-              <h3 className="text-sm font-semibold uppercase tracking-widest text-white/80">
-                {g.title}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {g.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
-                      className="text-sm text-white/60 transition-colors hover:text-white"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        <motion.nav
+          aria-label="Footer"
+          variants={fadeUp}
+          className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3"
+        >
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-sm text-white/55 transition-colors hover:text-white"
+            >
+              {l.label}
+            </a>
           ))}
-        </div>
+        </motion.nav>
 
         <motion.div
           variants={fadeUp}
-          className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/5
+          className="mt-12 flex flex-col items-start justify-between gap-6 border-t border-white/5
             pt-8 sm:flex-row sm:items-center"
         >
           <p className="text-xs text-white/45">
-            © {new Date().getFullYear()} Aurora Labs. All rights reserved.
+            © {new Date().getFullYear()} {personal.name}. Crafted in Berlin.
           </p>
-          <p className="text-xs text-white/45">
-            Crafted with <span className="text-glow-pink">♥</span> for cinematic experiences.
-          </p>
+          <div className="flex items-center gap-2">
+            {personal.socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                aria-label={s.label}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full
+                  border border-white/10 bg-white/5 text-white/70 transition-all
+                  hover:scale-110 hover:bg-white/10 hover:text-white"
+              >
+                <Icon name={s.icon} size={16} />
+              </a>
+            ))}
+          </div>
         </motion.div>
       </motion.div>
     </footer>

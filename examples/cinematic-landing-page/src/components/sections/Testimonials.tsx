@@ -1,85 +1,143 @@
-import { motion } from 'framer-motion';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { useCallback, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { fadeUp, stagger, viewportOnce } from '@/lib/motion';
+import { Icon } from '@/components/ui/Icon';
+import { testimonials } from '@/data/testimonials';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { cn } from '@/lib/cn';
 
-const testimonials = [
-  {
-    quote:
-      'Aurora made our launch feel cinematic. Conversion jumped 38% the first week, and the whole team genuinely enjoys building on top of it.',
-    name: 'Aria Chen',
-    role: 'Head of Design, Lumen',
-    initials: 'AC',
-    color: 'from-glow-violet to-glow-pink',
-  },
-  {
-    quote:
-      'The motion vocabulary is just right — opinionated where it should be, flexible where it counts. Best landing page stack I have used.',
-    name: 'Marcus Holloway',
-    role: 'Staff Engineer, Northbeam',
-    initials: 'MH',
-    color: 'from-brand-500 to-accent-400',
-  },
-  {
-    quote:
-      'Glassmorphism, particles, scroll choreography — every detail is wired up. We shipped an investor-ready story in two afternoons.',
-    name: 'Priya Anand',
-    role: 'Founder, Studio Halo',
-    initials: 'PA',
-    color: 'from-glow-pink to-amber-400',
-  },
-];
+const AUTOPLAY_MS = 6500;
 
 export function Testimonials() {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reduced = useReducedMotion();
+  const total = testimonials.length;
+
+  const next = useCallback(() => setIndex((i) => (i + 1) % total), [total]);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + total) % total), [total]);
+
+  useEffect(() => {
+    if (paused || reduced) return;
+    const id = window.setInterval(next, AUTOPLAY_MS);
+    return () => window.clearInterval(id);
+  }, [paused, reduced, next]);
+
+  const t = testimonials[index];
+
   return (
-    <section id="testimonials" className="relative section-padding">
+    <section id="testimonials" aria-label="Testimonials" className="relative section-padding">
       <div className="container-narrow">
         <SectionHeader
-          eyebrow="Loved by builders"
-          title="Stories from teams that ship."
-          description="Real product teams are using Aurora to launch faster — and look unmistakably better while doing it."
+          eyebrow="Testimonials"
+          title="Words from collaborators."
+          description="The fastest signal on whether someone is worth hiring is what the people who already worked with them say."
         />
 
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOnce}
-          className="grid gap-5 lg:grid-cols-3"
+        <div
+          className="relative mx-auto max-w-3xl"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          {testimonials.map((t, i) => (
-            <motion.div key={t.name} variants={fadeUp} custom={i}>
-              <GlassCard
-                glow={i % 3 === 0 ? 'violet' : i % 3 === 1 ? 'cyan' : 'pink'}
-                className="flex h-full flex-col justify-between"
-              >
-                <div>
+          <div className="relative overflow-hidden rounded-3xl border border-white/10
+            bg-white/[0.03] p-8 backdrop-blur-md sm:p-12">
+            {/* corner glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-20 -right-16 h-64 w-64 rounded-full
+                bg-glow-violet/20 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full
+                bg-glow-pink/15 blur-3xl"
+            />
+
+            <div className="relative min-h-[18rem]">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={t.name}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col gap-7"
+                >
                   <svg
                     aria-hidden
                     viewBox="0 0 24 24"
-                    className="mb-5 h-8 w-8 text-white/30"
+                    className="h-9 w-9 text-white/25"
                     fill="currentColor"
                   >
                     <path d="M7 7h4v4H8c0 3 2 4 4 4v3c-5 0-8-3-8-7V7zm9 0h4v4h-3c0 3 2 4 4 4v3c-5 0-8-3-8-7V7z" />
                   </svg>
-                  <p className="text-[15px] leading-relaxed text-white/85">"{t.quote}"</p>
-                </div>
-                <div className="mt-6 flex items-center gap-3">
-                  <span
-                    className={`inline-flex h-11 w-11 items-center justify-center rounded-full
-                      bg-gradient-to-br ${t.color} text-sm font-semibold text-white shadow-glow`}
-                  >
-                    {t.initials}
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-white/55">{t.role}</p>
+                  <blockquote className="font-display text-xl leading-relaxed text-white/90 sm:text-2xl">
+                    "{t.quote}"
+                  </blockquote>
+                  <div className="flex items-center gap-4">
+                    <span
+                      className={cn(
+                        'inline-flex h-12 w-12 items-center justify-center rounded-full font-semibold text-white shadow-glow',
+                        'bg-gradient-to-br',
+                        t.color
+                      )}
+                    >
+                      {t.initials}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{t.name}</p>
+                      <p className="text-xs text-white/55">
+                        {t.role} · {t.company}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </GlassCard>
-            </motion.div>
-          ))}
-        </motion.div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="mt-6 flex items-center justify-between">
+            <div className="flex gap-1.5" role="tablist" aria-label="Choose testimonial">
+              {testimonials.map((tt, i) => (
+                <button
+                  key={tt.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === index}
+                  aria-label={`Show testimonial from ${tt.name}`}
+                  onClick={() => setIndex(i)}
+                  className={cn(
+                    'h-1.5 rounded-full transition-all',
+                    i === index ? 'w-8 bg-white' : 'w-4 bg-white/20 hover:bg-white/40'
+                  )}
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={prev}
+                aria-label="Previous testimonial"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full
+                  border border-white/10 bg-white/5 text-white/80 transition-colors
+                  hover:bg-white/10 hover:text-white"
+              >
+                <Icon name="chevron" size={16} className="-rotate-90" />
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                aria-label="Next testimonial"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full
+                  border border-white/10 bg-white/5 text-white/80 transition-colors
+                  hover:bg-white/10 hover:text-white"
+              >
+                <Icon name="chevron" size={16} className="rotate-90" />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

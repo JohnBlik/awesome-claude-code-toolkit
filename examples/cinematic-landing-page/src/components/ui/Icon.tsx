@@ -1,7 +1,8 @@
 import type { SVGProps } from 'react';
 
-type IconName =
+export type IconName =
   | 'arrowRight'
+  | 'arrowUpRight'
   | 'sparkle'
   | 'bolt'
   | 'shield'
@@ -18,7 +19,9 @@ type IconName =
   | 'play'
   | 'github'
   | 'twitter'
-  | 'linkedin';
+  | 'linkedin'
+  | 'mail'
+  | 'send';
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
@@ -28,6 +31,23 @@ interface IconProps extends SVGProps<SVGSVGElement> {
 const paths: Record<IconName, JSX.Element> = {
   arrowRight: (
     <path d="M5 12h14M13 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  arrowUpRight: (
+    <path d="M7 17L17 7M8 7h9v9" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" strokeWidth={1.6} />
+      <path d="M3 7l9 6 9-6" strokeWidth={1.6} strokeLinejoin="round" />
+    </>
+  ),
+  send: (
+    <path
+      d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   ),
   sparkle: (
     <>

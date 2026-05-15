@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
+import { MagneticButton } from '@/components/ui/MagneticButton';
 import { useTheme } from '@/hooks/useTheme';
+import { personal } from '@/data/personal';
 import { cn } from '@/lib/cn';
 
 const links = [
-  { href: '#features', label: 'Features' },
-  { href: '#stats', label: 'Impact' },
-  { href: '#testimonials', label: 'Stories' },
+  { href: '#about', label: 'About' },
+  { href: '#services', label: 'Services' },
+  { href: '#portfolio', label: 'Work' },
+  { href: '#process', label: 'Process' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '#contact', label: 'Contact' },
 ];
 
 export function Navbar() {
@@ -52,13 +55,19 @@ export function Navbar() {
           <div className="flex items-center justify-between gap-4">
             <a
               href="#top"
-              className="flex items-center gap-2 font-display text-lg font-semibold"
+              className="flex items-center gap-2.5 font-display font-semibold"
+              aria-label={`${personal.name} — home`}
             >
-              <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg
-                bg-gradient-to-br from-brand-500 via-glow-violet to-glow-pink shadow-glow">
-                <Icon name="sparkle" size={16} className="text-white" />
+              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg
+                bg-gradient-to-br from-brand-500 via-glow-violet to-glow-pink text-white shadow-glow">
+                <span className="text-[13px] font-semibold">{personal.initials}</span>
               </span>
-              Aurora
+              <span className="hidden sm:inline-flex flex-col leading-tight">
+                <span className="text-sm font-semibold">{personal.name}</span>
+                <span className="text-[10px] uppercase tracking-widest text-white/45">
+                  Designer · Developer
+                </span>
+              </span>
             </a>
 
             <ul className="hidden md:flex items-center gap-1">
@@ -66,7 +75,7 @@ export function Navbar() {
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    className="relative px-3.5 py-2 text-sm text-white/75 transition-colors
+                    className="relative px-3 py-2 text-sm text-white/75 transition-colors
                       hover:text-white group"
                   >
                     {l.label}
@@ -91,10 +100,12 @@ export function Navbar() {
               >
                 <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={16} />
               </button>
-              <Button size="sm" className="hidden sm:inline-flex">
-                Get Started
-                <Icon name="arrowRight" size={14} />
-              </Button>
+              <MagneticButton strength={0.25} className="hidden sm:inline-flex">
+                <Button as="a" href="#contact" size="sm">
+                  Hire me
+                  <Icon name="arrowUpRight" size={14} />
+                </Button>
+              </MagneticButton>
               <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
@@ -140,9 +151,9 @@ export function Navbar() {
                 </li>
               ))}
               <li className="mt-4">
-                <Button className="w-full" onClick={() => setOpen(false)}>
-                  Get Started
-                  <Icon name="arrowRight" size={14} />
+                <Button as="a" href="#contact" className="w-full" onClick={() => setOpen(false)}>
+                  Hire me
+                  <Icon name="arrowUpRight" size={14} />
                 </Button>
               </li>
             </motion.ul>
